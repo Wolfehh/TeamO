@@ -1,4 +1,4 @@
-package Team O;
+package TeamO;
 
 
 import static com.codename1.ui.CN.*;
