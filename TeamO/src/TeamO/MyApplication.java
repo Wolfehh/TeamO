@@ -45,15 +45,23 @@ public class MyApplication {
             Dialog.show("Connection Error", "There was a networking error in the connection to " + err.getConnectionRequest().getUrl(), "OK", null);
         });        
     }
-    
+
+    void createNotification(Form app, String appName, String information){
+        app.add(new Label("App Name: " +  appName));
+        app.add(new Label("\nNotification Information: "  + information));
+        app.show();
+    }
+
     public void start() {
         if(current != null){
             current.show();
             return;
         }
-        Form hi = new Form("Hi World", BoxLayout.y());
-        hi.add(new Label("Hi World"));
-        hi.show();
+        boolean gotNotification = true;
+        if(gotNotification) {
+            Form app = new Form("Team O", BoxLayout.y());
+            createNotification(app, "Snapchat", "Dee sent a snap!");
+        }
     }
 
     public void stop() {
