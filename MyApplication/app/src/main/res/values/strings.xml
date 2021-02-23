@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="fb_not_recieved">You\'ve recieved a notification from Facebook</string>
+    <string name="snap_not_recieved">You\'ve recieved a notification from Snapchat</string>
+    <string name="twitter_not_recieved">You\'ve recieved a notification from Twitter</string>
+    <string name="insta_not_recieved">You\'ve recieved a notification from Instagram</string>
+    <string name="view_details">More</string>
+    <string name="fb_not_title">List of Recieved Facebook Notifications:</string>
+    <string name="twitter_not_title">List of Recieved Twitter Notifications:</string>
+    <string name="snap_not_title">List of Recieved Snapchat Notifications:</string>
+    <string name="insta_not_title">List of Recieved Instagram Notifications</string>
+    <string name="title_activity_display_fb_nots">DisplayFbNots</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
