@@ -59,6 +59,7 @@
         android:layout_marginTop="16dp"
         android:hint="@string/view_details"
         android:onClick="viewTwitterDetails"
+        android:visibility="visible"
         app:backgroundTint="@color/purple_200"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
