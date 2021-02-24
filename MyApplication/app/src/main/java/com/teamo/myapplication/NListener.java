@@ -17,27 +17,29 @@ public class NListener extends NotificationListenerService
     @Override
     public void onCreate()
     {
-
+        super.onCreate();
     }
 
     @Override
     public void onDestroy()
     {
-
+        super.onDestroy();
     }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sNotif)
     {
-        Log.i(TAG, ":Notification Removed");
+        Log.i(TAG, ":Notification Posted");
         Log.i(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
-        
+
 
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sNotif)
     {
+        Log.i(TAG, ":Notification Removed");
+        Log.i(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
 
     }
 
