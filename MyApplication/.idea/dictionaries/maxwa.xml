@@ -2,6 +2,7 @@
   <dictionary name="maxwa">
     <words>
       <w>notif</w>
+      <w>recv</w>
     </words>
   </dictionary>
 </component>
