@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class DisplayTwitterNots extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,5 +38,24 @@ public class DisplayTwitterNots extends AppCompatActivity {
         textView.setHeight(79); // Sets height
         textView.setText(theNotification);  // Sets text of the textview
         linearLayout.addView(textView); // Adds textview to the screen
+
+        // Create clear Button
+        Button clear = new Button(this);
+        clear.setId(id); // Same id as notification TextView
+        clear.setWidth(linearLayout.getWidth()); // Sets width
+        clear.setHeight(79); // Sets height
+        String CLEAR = "CLEAR";
+        clear.setText(CLEAR);  // Sets text of the Button
+        linearLayout.addView(clear); // Adds Button to the screen
+
+        // Remove both Button and TextView on click
+        clear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                linearLayout.removeView(clear); // Remove Button
+                linearLayout.removeView(textView); // Remove TextView
+            }
+        });
+
+
     }
 }
