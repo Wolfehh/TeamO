@@ -1,8 +1,13 @@
 package com.teamo.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +30,19 @@ public class DisplayTwitterNots extends AppCompatActivity {
         createNotification(linearLayout,"Spaghetti :(");
         createNotification(linearLayout,"Spaghetti :)");
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(DisplayTwitterNots.this,"My Notification");
+        builder.setContentTitle("Test Title");
+        builder.setContentText("Test Text");
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(DisplayTwitterNots.this);
+        managerCompat.notify(1,builder.build());
     }
 
     void createNotification(LinearLayout linearLayout, String notification){
