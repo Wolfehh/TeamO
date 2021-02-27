@@ -57,23 +57,60 @@ public class DisplayTwitterNots extends AppCompatActivity {
         textView.setText(theNotification);  // Sets text of the textview
         linearLayout.addView(textView); // Adds textview to the screen
 
+        createButtons(textView, linearLayout); // Create buttons for notification interactions
+
+    }
+
+    /**
+     * Helper method. Creates like, reply, retweet, and clear buttons for each notification.
+     * @param textView - the notification the buttons are being made for
+     * @param linearLayout - the layout for both notifications and buttons
+     */
+    void createButtons(TextView textView, LinearLayout linearLayout) {
+
+        // Create like Button
+        Button like = new Button(this);
+        like.setWidth(linearLayout.getWidth()); // Sets width
+        like.setHeight(79); // Sets height
+        String Like = "Like";
+        like.setText(Like);  // Sets text of the Button
+        linearLayout.addView(like); // Adds Button to the screen
+
+        // Create reply Button
+        Button reply = new Button(this);
+        reply.setWidth(linearLayout.getWidth()); // Sets width
+        reply.setHeight(79); // Sets height
+        String Reply = "Reply";
+        reply.setText(Reply);  // Sets text of the Button
+        linearLayout.addView(reply); // Adds Button to the screen
+
+        // Create retweet Button
+        Button retweet = new Button(this);
+        retweet.setWidth(linearLayout.getWidth()); // Sets width
+        retweet.setHeight(79); // Sets height
+        String Retweet = "Retweet";
+        retweet.setText(Retweet);  // Sets text of the Button
+        linearLayout.addView(retweet); // Adds Button to the screen
+
         // Create clear Button
         Button clear = new Button(this);
-        clear.setId(id); // Same id as notification TextView
         clear.setWidth(linearLayout.getWidth()); // Sets width
         clear.setHeight(79); // Sets height
         String CLEAR = "CLEAR";
         clear.setText(CLEAR);  // Sets text of the Button
         linearLayout.addView(clear); // Adds Button to the screen
 
-        // Remove both Button and TextView on click
+        // Remove all associated Buttons and notification TextView on click
         clear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                linearLayout.removeView(clear); // Remove Button
+                // Remove Buttons
+                linearLayout.removeView(like);
+                linearLayout.removeView(reply);
+                linearLayout.removeView(retweet);
+                linearLayout.removeView(clear);
+
                 linearLayout.removeView(textView); // Remove TextView
             }
         });
-
-
     }
 }
