@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -72,6 +73,8 @@ public class DisplayTwitterNots extends AppCompatActivity {
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.addView(buttonLayout); // Add new layout to the notification layout
 
+        String TAG = this.getClass().getSimpleName();
+
         // Create like Button
         Button like = new Button(this);
         like.setWidth(270); // Sets width
@@ -79,6 +82,13 @@ public class DisplayTwitterNots extends AppCompatActivity {
         String Like = "Like";
         like.setText(Like);  // Sets text of the Button
         buttonLayout.addView(like); // Adds Button to the screen
+
+        // Create onClickListener for like Button
+        like.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "LIKE Button pushed."); // Send log message for testing purposes
+            }
+        });
 
         // Create reply Button
         Button reply = new Button(this);
@@ -88,6 +98,13 @@ public class DisplayTwitterNots extends AppCompatActivity {
         reply.setText(Reply);  // Sets text of the Button
         buttonLayout.addView(reply); // Adds Button to the screen
 
+        // Create onClickListener for reply Button
+        reply.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "REPLY Button pushed."); // Send log message for testing purposes
+            }
+        });
+
         // Create retweet Button
         Button retweet = new Button(this);
         retweet.setWidth(270); // Sets width
@@ -95,6 +112,13 @@ public class DisplayTwitterNots extends AppCompatActivity {
         String Retweet = "Retweet";
         retweet.setText(Retweet);  // Sets text of the Button
         buttonLayout.addView(retweet); // Adds Button to the screen
+
+        // Create onClickListener for retweet Button
+        retweet.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "RETWEET Button pushed."); // Send log message for testing purposes
+            }
+        });
 
         // Create clear Button
         Button clear = new Button(this);
@@ -107,6 +131,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
         // Remove all associated Buttons and notification TextView on click
         clear.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.i(TAG, "CLEAR Button pushed."); // Send log message for testing purposes
                 // Remove Buttons
                 buttonLayout.removeView(like);
                 buttonLayout.removeView(reply);
