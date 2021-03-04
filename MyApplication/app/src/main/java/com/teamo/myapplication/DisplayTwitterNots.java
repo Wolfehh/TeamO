@@ -88,6 +88,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
     void createNotification(LinearLayout linearLayout, String notification){
         notificationsTracker.add(notification); // Adds to the modifiable array list
+        Log.i("string", notification);
         setContentView(linearLayout);   // Sets to the linear layout we create in onCreate
         linearLayout.setOrientation(LinearLayout.VERTICAL); // Ensures the layout is a vertical one and not a horizontal one
         String theNotification = "Notification: " + notification;   // Concatenates the text so it says Notification:
@@ -98,25 +99,92 @@ public class DisplayTwitterNots extends AppCompatActivity {
         textView.setHeight(79); // Sets height
         textView.setText(theNotification);  // Sets text of the textview
         linearLayout.addView(textView); // Adds textview to the screen
-        // Create clear Button
-        Button clear = new Button(this);
-        clear.setId(id); // Same id as notification TextView
-        clear.setWidth(linearLayout.getWidth()); // Sets width
-        clear.setHeight(79); // Sets height
-        String CLEAR = "CLEAR";
-        clear.setText(CLEAR);  // Sets text of the Button
-        linearLayout.addView(clear); // Adds Button to the screen
+        createButtons(textView, linearLayout); // Create buttons for notification interactions
 
-        // Remove both Button and TextView on click
-        clear.setOnClickListener(new View.OnClickListener() {
+    }
+
+    /**
+     * Helper method. Creates like, reply, retweet, and clear buttons for each notification.
+     * @param textView - the notification the buttons are being made for
+     * @param linearLayout - the layout containing the notifications
+     */
+    void createButtons(TextView textView, LinearLayout linearLayout) {
+        // Create new layout so buttons can be arranged horizontally below the notification
+        LinearLayout buttonLayout = new LinearLayout(this);
+        buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.addView(buttonLayout); // Add new layout to the notification layout
+
+        String TAG = this.getClass().getSimpleName();
+
+        // Create like Button
+        Button like = new Button(this);
+        like.setWidth(270); // Sets width
+        like.setHeight(79); // Sets height
+        String Like = "Like";
+        like.setText(Like);  // Sets text of the Button
+        buttonLayout.addView(like); // Adds Button to the screen
+
+        // Create onClickListener for like Button
+        like.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                linearLayout.removeView(clear); // Remove Button
-                linearLayout.removeView(textView); // Remove TextView
-                notificationsTracker.remove(notification); // Removes from the modifiable array list
+                Log.i(TAG, "LIKE Button pushed."); // Send log message for testing purposes
             }
         });
 
+        // Create reply Button
+        Button reply = new Button(this);
+        reply.setWidth(270); // Sets width
+        reply.setHeight(79); // Sets height
+        String Reply = "Reply";
+        reply.setText(Reply);  // Sets text of the Button
+        buttonLayout.addView(reply); // Adds Button to the screen
 
+        // Create onClickListener for reply Button
+        reply.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "REPLY Button pushed."); // Send log message for testing purposes
+            }
+        });
+
+        // Create retweet Button
+        Button retweet = new Button(this);
+        retweet.setWidth(270); // Sets width
+        retweet.setHeight(79); // Sets height
+        String Retweet = "Retweet";
+        retweet.setText(Retweet);  // Sets text of the Button
+        buttonLayout.addView(retweet); // Adds Button to the screen
+
+        // Create onClickListener for retweet Button
+        retweet.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "RETWEET Button pushed."); // Send log message for testing purposes
+            }
+        });
+
+        // Create clear Button
+        Button clear = new Button(this);
+        clear.setWidth(270); // Sets width
+        clear.setHeight(79); // Sets height
+        String CLEAR = "CLEAR";
+        clear.setText(CLEAR);  // Sets text of the Button
+        buttonLayout.addView(clear); // Adds Button to the screen
+
+        // Remove all associated Buttons and notification TextView on click
+        clear.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.i(TAG, "CLEAR Button pushed."); // Send log message for testing purposes
+                // Remove Buttons
+                buttonLayout.removeView(like);
+                buttonLayout.removeView(reply);
+                buttonLayout.removeView(retweet);
+                buttonLayout.removeView(clear);
+                // Remove TextView
+                linearLayout.removeView(textView);
+                Log.i("substring",textView.getText().toString().substring(14));
+                notificationsTracker.remove(textView.getText().toString().substring(14));
+
+            }
+        });
     }
 
     @Override
