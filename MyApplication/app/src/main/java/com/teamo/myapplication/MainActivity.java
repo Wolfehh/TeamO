@@ -43,20 +43,20 @@ public class MainActivity extends AppCompatActivity {
         Button instaButton = findViewById(R.id.button4);
         //Changing visiblity of Views if there are no notifications from a particular site
         if(twitterNots.isEmpty()){
-            twitter.setVisibility(View.INVISIBLE);
-            twitterButton.setVisibility(View.INVISIBLE);
+            twitter.setVisibility(View.GONE);
+            twitterButton.setVisibility(View.GONE);
         }
         if(fbNots.isEmpty()){
-            fb.setVisibility(View.INVISIBLE);
-            fbButton.setVisibility(View.INVISIBLE);
+            fb.setVisibility(View.GONE);
+            fbButton.setVisibility(View.GONE);
         }
         if(instaNots.isEmpty()){
-            insta.setVisibility(View.INVISIBLE);
-            instaButton.setVisibility(View.INVISIBLE);
+            insta.setVisibility(View.GONE);
+            instaButton.setVisibility(View.GONE);
         }
         if(snapNots.isEmpty()){
-            snap.setVisibility(View.INVISIBLE);
-            snapButton.setVisibility(View.INVISIBLE);
+            snap.setVisibility(View.GONE);
+            snapButton.setVisibility(View.GONE);
         }
 
     }
