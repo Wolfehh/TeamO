@@ -1,12 +1,8 @@
 package com.teamo.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,6 +30,14 @@ public class DisplayTwitterNots extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_twitter_nots);
         loadData(); // Loads previous data in shared preference and initializes notifications
+        //Loading any new incoming notifications from Main Activity
+        Intent intent = getIntent();
+        ArrayList<String> incomingNotifications = intent.getStringArrayListExtra("twitterNots");
+        //Adding new notifications to display to our pre-loaded notification list. Removing them from incoming notifications in Main Activity.
+        while (!incomingNotifications.isEmpty()){
+            notifications.add(incomingNotifications.remove(0));
+            MainActivity.twitterNots.remove(0);
+        }
         notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
         LinearLayout linearLayout = new LinearLayout(this); // Creates a linear layout when the activity is opened
         if(!(notifications.isEmpty())){ // Loads all of the notifications in the shared preferences
