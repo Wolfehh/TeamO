@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Initializing and adding a random value for testing purposes - can comment out or alter to see other changes later
         twitterNots.add("Random to Test");
+        twitterNots.add("Test2");
         //fbNots.add("Test");
         //snapNots.add("snap");
         //instaNots.add("Words");

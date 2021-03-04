@@ -35,8 +35,15 @@ public class DisplayTwitterNots extends AppCompatActivity {
         ArrayList<String> incomingNotifications = intent.getStringArrayListExtra("twitterNots");
         //Adding new notifications to display to our pre-loaded notification list. Removing them from incoming notifications in Main Activity.
         while (!incomingNotifications.isEmpty()){
-            notifications.add(incomingNotifications.remove(0));
-            MainActivity.twitterNots.remove(0);
+            if(notifications.contains(incomingNotifications.get(0))){
+                incomingNotifications.remove(0);
+                MainActivity.twitterNots.remove(0);
+            }
+            else{
+                notifications.add(incomingNotifications.remove(0));
+                MainActivity.twitterNots.remove(0);
+            }
+
         }
         notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
         LinearLayout linearLayout = new LinearLayout(this); // Creates a linear layout when the activity is opened
@@ -76,6 +83,12 @@ public class DisplayTwitterNots extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(notifications);
         editor.putString("Notification List", json);
+        //Attempting to prevent deletion of needed items from Main Activity's list of Notifications
+        Type type = new TypeToken<ArrayList<String>>(){}.getType();
+        ArrayList<String> temp = gson.fromJson(json, type);
+        while (!temp.isEmpty()){
+            MainActivity.twitterNots.add(temp.remove(0));
+        }
         editor.apply();
     }
 
