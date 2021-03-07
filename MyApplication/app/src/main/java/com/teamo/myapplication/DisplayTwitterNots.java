@@ -1,35 +1,65 @@
 package com.teamo.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class DisplayTwitterNots extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+public class DisplayTwitterNots extends AppCompatActivity {
+    ArrayList<String> notifications;
+    ArrayList<String> notificationsTracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_twitter_nots);
-        LinearLayout linearLayout = new LinearLayout(this); // Creates a linear layout when the apps created?
-        createNotification(linearLayout,"Spaghetti");
-        createNotification(linearLayout,"Spaghetti.");
+        loadData(); // Loads previous data in shared preference and initializes notifications
+        //Loading any new incoming notifications from Main Activity
+        Intent intent = getIntent();
+        ArrayList<String> incomingNotifications = intent.getStringArrayListExtra("twitterNots");
+        //Adding new notifications to display to our pre-loaded notification list. Removing them from incoming notifications in Main Activity.
+        while (!incomingNotifications.isEmpty()){
+            if(notifications.contains(incomingNotifications.get(0))){
+                incomingNotifications.remove(0);
+                MainActivity.twitterNots.remove(0);
+            }
+            else{
+                notifications.add(incomingNotifications.remove(0));
+                MainActivity.twitterNots.remove(0);
+            }
+
+        }
+        notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
+        LinearLayout linearLayout = new LinearLayout(this); // Creates a linear layout when the activity is opened
+        if(!(notifications.isEmpty())){ // Loads all of the notifications in the shared preferences
+            for(int i = 0; i < notifications.size(); i++){
+                createNotification(linearLayout, notifications.get(i));
+            }
+        }
+
+        createNotification(linearLayout,"Spaghetti"); // Test notif. One should add every time you open Twitter
+        /*createNotification(linearLayout,"Spaghetti.");
         createNotification(linearLayout,"Spaghetti!");
         createNotification(linearLayout,"Spaghetti?");
         createNotification(linearLayout,"Spaghetti!!!");
         createNotification(linearLayout,"Spaghetti :(");
-        createNotification(linearLayout,"Spaghetti :)");
+        createNotification(linearLayout,"Spaghetti :)");*/
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
@@ -46,7 +76,39 @@ public class DisplayTwitterNots extends AppCompatActivity {
         managerCompat.notify(1,builder.build());
     }
 
+    // This method saves the data and keeps the notifications array list updated between activities.
+    private void saveData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(notifications);
+        editor.putString("Notification List", json);
+        //Attempting to prevent deletion of needed items from Main Activity's list of Notifications
+        Type type = new TypeToken<ArrayList<String>>(){}.getType();
+        ArrayList<String> temp = gson.fromJson(json, type);
+        while (!temp.isEmpty()){
+            MainActivity.twitterNots.add(temp.remove(0));
+        }
+        editor.apply();
+    }
+
+    // This method loads the data, updates, and initializes the array list
+    private void loadData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("Notification List", null);
+        Type type = new TypeToken<ArrayList<String>>(){}.getType();
+        notifications = gson.fromJson(json, type);
+
+        if(notifications == null){
+            notifications = new ArrayList<>();
+        }
+
+    }
+
     void createNotification(LinearLayout linearLayout, String notification){
+        notificationsTracker.add(notification); // Adds to the modifiable array list
+        Log.i("string", notification);
         setContentView(linearLayout);   // Sets to the linear layout we create in onCreate
         linearLayout.setOrientation(LinearLayout.VERTICAL); // Ensures the layout is a vertical one and not a horizontal one
         String theNotification = "Notification: " + notification;   // Concatenates the text so it says Notification:
@@ -57,7 +119,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
         textView.setHeight(79); // Sets height
         textView.setText(theNotification);  // Sets text of the textview
         linearLayout.addView(textView); // Adds textview to the screen
-
         createButtons(textView, linearLayout); // Create buttons for notification interactions
 
     }
@@ -139,7 +200,18 @@ public class DisplayTwitterNots extends AppCompatActivity {
                 buttonLayout.removeView(clear);
                 // Remove TextView
                 linearLayout.removeView(textView);
+                Log.i("substring",textView.getText().toString().substring(14));
+                notificationsTracker.remove(textView.getText().toString().substring(14));
+
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notifications.clear(); // Empties the array list
+        notifications.addAll(notificationsTracker); // Adds the new array list of leftover notifications
+        saveData(); // Saves to shared preferences
     }
 }
