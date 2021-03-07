@@ -17,18 +17,18 @@ public class NListener extends NotificationListenerService
 {
 
     private String TAG = this.getClass().getSimpleName();
-//    private NReceiver nRecv;
+    private NReceiver nRecv;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
-//        nRecv = new NReceiver();
+        nRecv = new NReceiver();
         IntentFilter filter = new IntentFilter();
 
         //standard for adding actions is package name + event in all caps with underscores
         filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
-//        registerReceiver(nRecv, filter);
+        registerReceiver(nRecv, filter);
 
     }
 
@@ -36,7 +36,7 @@ public class NListener extends NotificationListenerService
     public void onDestroy()
     {
         super.onDestroy();
-//        unregisterReceiver(nRecv);
+        unregisterReceiver(nRecv);
     }
 
 
@@ -66,7 +66,7 @@ public class NListener extends NotificationListenerService
         Log.i(TAG, "Notification Removed");
         Log.i(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
         Intent remove = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
-        remove.putExtra("notification_event", "onNotificationPosted:" + sNotif.getPackageName() + "\n");
+        remove.putExtra("notification_event", "onNotificationRemoved:" + sNotif.getPackageName() + "\n");
         sendBroadcast(remove);
     }
 
@@ -74,37 +74,24 @@ public class NListener extends NotificationListenerService
      * private nested class for braodcasting receiver
      * this allows us to receive notifications while app is not open
      */
-//    private class NReceiver extends BroadcastReceiver
-//    {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent)
-//        {
-//            if (intent.getStringExtra("command").equals("list"))
-//            {
-//                NListener.this.cancelAllNotifications();
-//            }
-//            else if (intent.getStringExtra("command").equals("list"))
-//            {
-//                Intent i1 = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
-//                i1.putExtra("notification_event", "=");
-//                sendBroadcast(i1);
-//                int i = 1;
-//                for (StatusBarNotification sNotif : NListener.this.getActiveNotifications())
-//                {
-//                    Intent i2 = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
-//                    i2.putExtra("notification_event", i + " " + sNotif.getPackageName() + "\n");
-//                    sendBroadcast(i2);
-//                    i++;
-//                }
-//                Intent i3 = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
-//                i3.putExtra("notification_event", "==");
-//                sendBroadcast(i3);
-//            }
-//
-//
-//        }
-//    }
+    private class NReceiver extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            if (intent.getStringExtra("notification_event").equals("onNotificationPosted:"))
+            {
+                Log.i(TAG, "Notification Received");
+            }
+            else if (intent.getStringExtra("notification_event").equals("onNotificationRemoved:"))
+            {
+                Log.i(TAG, "Notification Received");
+            }
+
+
+        }
+    }
 
 
 
