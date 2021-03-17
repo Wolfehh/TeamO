@@ -50,8 +50,14 @@ public class NListener extends NotificationListenerService
     @Override
     public void onNotificationPosted(StatusBarNotification sNotif)
     {
-        Log.i(TAG, "Notification Posted");
-        Log.i(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
+        //Logging this to debug only because we know for sure this works
+        //and it is not very good information for us to clutter the information logs
+        Log.d(TAG, "Notification Posted");
+        Log.d(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
+
+        //Creating an INTENT to post a notification using our package
+        //then I am BROADCASTING this so a receiver can pick it up.
+        //example broadcast - onNotificationPosted:com.snapchat.android
         Intent post = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
         post.putExtra("notification_event", "onNotificationPosted:" + sNotif.getPackageName() + "\n");
         sendBroadcast(post);
@@ -66,8 +72,14 @@ public class NListener extends NotificationListenerService
     @Override
     public void onNotificationRemoved(StatusBarNotification sNotif)
     {
-        Log.i(TAG, "Notification Removed");
-        Log.i(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
+        //Logging this to debug only because we know for sure this works
+        //and it is not very good information for us to clutter the information logs
+        Log.d(TAG, "Notification Removed");
+        Log.d(TAG, "ID: " + sNotif.getId() + "\t" + sNotif.getNotification().tickerText + "\t" + sNotif.getPackageName());
+
+        //Creating an INTENT to post a notification using our package
+        //then I am BROADCASTING this so a receiver can pick it up.
+        //example broadcast - onNotificationRemoved:com.snapchat.android
         Intent remove = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
         remove.putExtra("notification_event", "onNotificationRemoved:" + sNotif.getPackageName() + "\n");
         sendBroadcast(remove);
@@ -75,7 +87,7 @@ public class NListener extends NotificationListenerService
 
     /**
      * private nested class for braodcasting receiver
-     * this allows us to receive notifications while app is not open
+     * logs notifications as they are received
      */
     private class NReceiver extends BroadcastReceiver
     {
@@ -83,13 +95,14 @@ public class NListener extends NotificationListenerService
         @Override
         public void onReceive(Context context, Intent intent)
         {
-            if (intent.getStringExtra("notification_event").equals("onNotificationPosted:"))
+            if (intent.getStringExtra("notification_event").contains("onNotificationPosted:"))
             {
-                Log.i(TAG, "Notification Received");
+                String temp = intent.getStringExtra("notification_event");
+                Log.i(TAG, "Posted notification brodcast received");
             }
-            else if (intent.getStringExtra("notification_event").equals("onNotificationRemoved:"))
+            else if (intent.getStringExtra("notification_event").contains("onNotificationRemoved:"))
             {
-                Log.i(TAG, "Notification Received");
+                Log.i(TAG, "Removed notification broadcast received");
             }
 
 
