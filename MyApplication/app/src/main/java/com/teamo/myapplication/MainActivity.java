@@ -1,7 +1,11 @@
 package com.teamo.myapplication;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
+    private String TAG = this.getClass().getSimpleName();
+    private NReceiver nRecv;
     //These array lists will store the string information to be printed in each notification method
+
    public static ArrayList<String> twitterNots = new ArrayList<>();
    public static ArrayList<String> fbNots = new ArrayList<>();
    public static ArrayList<String> snapNots = new ArrayList<>();
@@ -58,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
             snap.setVisibility(View.GONE);
             snapButton.setVisibility(View.GONE);
         }
+
+
+        nRecv = new NReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
+        registerReceiver(nRecv, filter);
 
     }
 
@@ -105,5 +117,26 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    /**
+     * private nested class for braodcasting receiver
+     * logs notifications as they are received
+     */
+    private class NReceiver extends BroadcastReceiver
+    {
+
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            String temp = intent.getStringExtra("notification_event");
+            //temp will be in this format - onNotificationPosted:com.snapchat.android
+            //therefore we can then filter this out to be -> snapchat
+            //this will also come in this format - onNotificationRemoved:com.snapchat.android
+            //this means that the notification was destroyed
+            //might be useful in the future
+            //for now I am just going to log this.
+            Log.i(TAG, temp);
+        }
+    }
 
 }
