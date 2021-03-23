@@ -60,6 +60,7 @@ public class NListener extends NotificationListenerService
         //example broadcast - onNotificationPosted:com.snapchat.android
         Intent post = new Intent("com.teamo.myapplication.NOTIFICATION_LISTENER");
         post.putExtra("notification_event", "onNotificationPosted:" + sNotif.getPackageName() + "\n");
+        post.putExtra("notification", "" + sNotif.getNotification().tickerText);
         sendBroadcast(post);
 
 
