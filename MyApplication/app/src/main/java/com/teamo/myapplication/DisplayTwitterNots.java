@@ -2,7 +2,10 @@ package com.teamo.myapplication;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 public class DisplayTwitterNots extends AppCompatActivity {
     ArrayList<String> notifications;
     ArrayList<String> notificationsTracker;
+    LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(DisplayTwitterNots.this);
         managerCompat.notify(1,builder.build());
+        
     }
 
     // This method saves the data and keeps the notifications array list updated between activities.

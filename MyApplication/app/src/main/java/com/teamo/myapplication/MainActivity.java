@@ -117,14 +117,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void addToList (String full, String notif, ArrayList arr){
+            arr.add(notif);
+    }
     /**
      * private nested class for braodcasting receiver
      * logs notifications as they are received
      */
     private class NReceiver extends BroadcastReceiver
     {
-
+        MainActivity main = new MainActivity();
         @Override
         public void onReceive(Context context, Intent intent)
         {
@@ -135,7 +137,16 @@ public class MainActivity extends AppCompatActivity {
             //this means that the notification was destroyed
             //might be useful in the future
             //for now I am just going to log this.
-            Log.i(TAG, temp);
+            //Log.i(TAG, temp);
+            if(temp.contains("Posted")) {
+                if (temp.contains("twitter")) {
+                    Log.d(TAG, "twitter worked");
+                    String notif = intent.getStringExtra("notification");
+                    Log.d(TAG, notif);
+                    main.addToList(temp, notif, twitterNots);
+
+                }
+            }
         }
     }
 
