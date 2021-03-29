@@ -2,10 +2,7 @@ package com.teamo.myapplication;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,7 +47,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         }
         notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
-        LinearLayout linearLayout = new LinearLayout(this); // Creates a linear layout when the activity is opened
+        LinearLayout linearLayout = findViewById(R.id.twitterLayout); // Creating a variable to reference our linear layout during the activity
         if(!(notifications.isEmpty())){ // Loads all of the notifications in the shared preferences
             for(int i = 0; i < notifications.size(); i++){
                 createNotification(linearLayout, notifications.get(i));
@@ -114,8 +111,14 @@ public class DisplayTwitterNots extends AppCompatActivity {
     void createNotification(LinearLayout linearLayout, String notification){
         notificationsTracker.add(notification); // Adds to the modifiable array list
         Log.i("string", notification);
-        setContentView(linearLayout);   // Sets to the linear layout we create in onCreate
-        linearLayout.setOrientation(LinearLayout.VERTICAL); // Ensures the layout is a vertical one and not a horizontal one
+
+        //These lines are commented out - I've hardcoded an ID for our linearlayout and have set the layout to be vertical in the xml file
+        //We can delete them before this branch is pulled, provided everyone agrees this change works properly during testing
+        //App will crash if they are not commented out - I will have to rework my code if we wish to create a brand new linear layout instead
+        //setContentView(linearLayout);   // Sets to the linear layout we create in onCreate
+        //linearLayout.setOrientation(LinearLayout.VERTICAL); // Ensures the layout is a vertical one and not a horizontal one
+
+
         String theNotification = "Notification: " + notification;   // Concatenates the text so it says Notification:
         TextView textView = new TextView(this); // Creates a new textbox in the activity context
         int id = (int)System.currentTimeMillis();   // Creates an id based off the time that it was created
