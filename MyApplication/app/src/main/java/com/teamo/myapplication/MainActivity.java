@@ -9,6 +9,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +27,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
+    private TwitterLoginButton loginButton;
+
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
@@ -31,7 +43,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Twitter.initialize(this);
         setContentView(R.layout.activity_main);
+
+        // Initialize and set up Twitter login button
+        loginButton = (TwitterLoginButton) findViewById(R.id.login_button);
+        loginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken authToken = session.getAuthToken();
+                String token = authToken.token;
+                String secret = authToken.secret;
+
+                // Show login success message on success
+                Toast.makeText(getApplicationContext(),"Login success", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Show login fail message on failure
+                Toast.makeText(getApplicationContext(),"Login fail", Toast.LENGTH_LONG).show();
+            }
+        });
+
         //Initializing and adding a random value for testing purposes - can comment out or alter to see other changes later
         twitterNots.add("Random to Test");
         twitterNots.add("Test2");
@@ -71,6 +106,15 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
         registerReceiver(nRecv, filter);
 
+    }
+
+    // Pass the result of the authentication Activity back to the login button
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass the activity result to the login button
+        loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

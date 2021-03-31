@@ -18,4 +18,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">vveVUOHX8AMshwmMD8qjwflJY</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">8dnztgDCZ3PjFjtCOOKbNdZbKNB57sR5i8N467Mknii9idt6MG</string>
 </resources>
