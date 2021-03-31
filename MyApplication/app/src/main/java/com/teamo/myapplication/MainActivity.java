@@ -1,9 +1,11 @@
 package com.teamo.myapplication;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,12 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
+    private static final int NOTIFICATION_PERMISSION_CODE = 1000;
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
@@ -71,6 +76,23 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
         registerReceiver(nRecv, filter);
 
+        getPermissions("android.permission.BIND_NOTIFICATION_LISTENER_SERVICE", NOTIFICATION_PERMISSION_CODE);
+
+    }
+
+    private void getPermissions(String permission, int code)
+    {
+        if(ContextCompat.checkSelfPermission(MainActivity.this,
+                permission)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            // if we do not have permissions, request permission
+            ActivityCompat.requestPermissions(MainActivity.this, new String[] { permission }, code);
+        }
+        else
+        {
+            Log.i(TAG, "Do not need to request as Notification Permissions already granted.\n");
+        }
     }
 
     /**
