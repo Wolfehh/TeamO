@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             if(temp.contains("Posted")) {
                 if (temp.contains("twitter")) {
                     Log.d(TAG, "twitter worked");
-                    String notif = intent.getStringExtra("notification");
+                    String notif = intent.getStringExtra("notification_information");
                     Log.d(TAG, notif);
                     main.addToList(temp, notif, twitterNots);
 
