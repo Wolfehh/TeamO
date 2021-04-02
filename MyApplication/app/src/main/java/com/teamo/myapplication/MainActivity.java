@@ -1,27 +1,39 @@
 package com.teamo.myapplication;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
+
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
-    private static final int NOTIFICATION_PERMISSION_CODE = 1000;
+    private static final int NOTIFICATION_PERMISSION_CODE = 100;
+    private static final String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
@@ -33,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
      * The onCreate method is what creates the default display on the screen. This is consistent in all activities.
      * @param savedInstanceState
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,22 +89,49 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
         registerReceiver(nRecv, filter);
 
-        getPermissions("android.permission.BIND_NOTIFICATION_LISTENER_SERVICE", NOTIFICATION_PERMISSION_CODE);
+        getPermissions();
+
+
+
+
 
     }
 
-    private void getPermissions(String permission, int code)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
     {
-        if(ContextCompat.checkSelfPermission(MainActivity.this,
-                permission)
-                != PackageManager.PERMISSION_GRANTED)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void getPermissions()
+    {
+        if( EasyPermissions.hasPermissions(this, perms) )
         {
-            // if we do not have permissions, request permission
-            ActivityCompat.requestPermissions(MainActivity.this, new String[] { permission }, code);
+            Log.i(TAG, "permissions already granted no need to request");
         }
         else
         {
-            Log.i(TAG, "Do not need to request as Notification Permissions already granted.\n");
+            Log.i(TAG, "Requesting Permissions");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setNegativeButton("Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    startActivity(intent);
+                }
+            });
+            builder.setPositiveButton("Ignore", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.i(TAG, "User denied permission request");
+                }
+            });
+            builder.setTitle("Notification permissions needed");
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 
