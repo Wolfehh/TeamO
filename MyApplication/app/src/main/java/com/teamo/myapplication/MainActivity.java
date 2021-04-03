@@ -3,6 +3,7 @@ package com.teamo.myapplication;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
@@ -32,8 +34,6 @@ import pub.devrel.easypermissions.PermissionRequest;
 public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
-    private static final int NOTIFICATION_PERMISSION_CODE = 100;
-    private static final String[] perms = {Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE};
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
@@ -97,23 +97,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    /**
+     * I really believe this is working
+     * The system level permissions
+     * are without a doubt the most ridiculous things in world history to access
+     */
     public void getPermissions()
     {
-        if( EasyPermissions.hasPermissions(this, perms) )
+
+        ContentResolver contentResolver = this.getContentResolver();
+        String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
+        Log.i(TAG, enabledNotificationListeners);
+
+        NotificationManagerCompat.getEnabledListenerPackages(this);
+        //Checks if the string has the proper notification listener within it.
+        if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(getPackageName()))
         {
-            Log.i(TAG, "permissions already granted no need to request");
-        }
-        else
-        {
+            //if it doesn't we request permissions through the dialog box (aka move to settings)
             Log.i(TAG, "Requesting Permissions");
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setNegativeButton("Open Settings", new DialogInterface.OnClickListener() {
@@ -132,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Notification permissions needed");
             AlertDialog dialog = builder.create();
             dialog.show();
+        }
+        else
+        {
+            //if it does we just log this and move on.
+            Log.i(TAG, "permissions already granted no need to request");
         }
     }
 
@@ -209,7 +215,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+
         }
+
+
+
+
     }
+
 
 }
