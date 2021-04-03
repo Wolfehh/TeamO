@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
     private static final int NOTIFICATION_PERMISSION_CODE = 100;
-    private static final String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final String[] perms = {Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE};
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
