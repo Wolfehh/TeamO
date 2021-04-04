@@ -28,6 +28,12 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -40,7 +46,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-<<<<<<< HEAD
 
     // For developers using AndroidX in their applications
     implementation 'pub.devrel:easypermissions:3.0.0'
@@ -50,6 +55,4 @@ dependencies {
 
     implementation 'com.twitter.sdk.android:twitter:3.1.1'
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
-=======
->>>>>>> parent of cdb26b1 (Merge pull request #39 from Wolfehh/NPermission)
 }
