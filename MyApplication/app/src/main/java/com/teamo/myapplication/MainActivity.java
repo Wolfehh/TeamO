@@ -57,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
                 String secret = authToken.secret;
 
                 // Show login success message on success
-                Toast.makeText(getApplicationContext(),"Login success", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Login successful", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void failure(TwitterException exception) {
                 // Show login fail message on failure
-                Toast.makeText(getApplicationContext(),"Login fail", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Login failed", Toast.LENGTH_LONG).show();
             }
         });
 
