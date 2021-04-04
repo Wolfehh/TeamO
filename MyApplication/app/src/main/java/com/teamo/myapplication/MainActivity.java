@@ -1,10 +1,18 @@
 package com.teamo.myapplication;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,10 +28,19 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
+
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
@@ -40,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
      * The onCreate method is what creates the default display on the screen. This is consistent in all activities.
      * @param savedInstanceState
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +124,56 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("com.teamo.myapplication.NOTIFICATION_LISTENER");
         registerReceiver(nRecv, filter);
 
+        getPermissions();
+
+
+
+
+
+    }
+
+
+    /**
+     * I really believe this is working
+     * The system level permissions
+     * are without a doubt the most ridiculous things in world history to access
+     */
+    public void getPermissions()
+    {
+
+        ContentResolver contentResolver = this.getContentResolver();
+        String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
+        Log.i(TAG, enabledNotificationListeners);
+
+        NotificationManagerCompat.getEnabledListenerPackages(this);
+        //Checks if the string has the proper notification listener within it.
+        if (enabledNotificationListeners == null || !enabledNotificationListeners.contains(getPackageName()))
+        {
+            //if it doesn't we request permissions through the dialog box (aka move to settings)
+            Log.i(TAG, "Requesting Permissions");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setNegativeButton("Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    startActivity(intent);
+                }
+            });
+            builder.setPositiveButton("Ignore", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.i(TAG, "User denied permission request");
+                }
+            });
+            builder.setTitle("Notification permissions needed");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            //if it does we just log this and move on.
+            Log.i(TAG, "permissions already granted no need to request");
+        }
     }
 
     // Pass the result of the authentication Activity back to the login button
@@ -185,13 +253,19 @@ public class MainActivity extends AppCompatActivity {
             if(temp.contains("Posted")) {
                 if (temp.contains("twitter")) {
                     Log.d(TAG, "twitter worked");
-                    String notif = intent.getStringExtra("notification");
+                    String notif = intent.getStringExtra("notification_information");
                     Log.d(TAG, notif);
                     main.addToList(temp, notif, twitterNots);
 
                 }
             }
+
         }
+
+
+
+
     }
+
 
 }
