@@ -1,10 +1,7 @@
 package com.teamo.myapplication;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.teamo.myapplication.notification.GlobalNotification;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -53,7 +49,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
                 createNotification(linearLayout, notifications.get(i));
             }
         }
-
+        GlobalNotification.buildNotification(this);
         createNotification(linearLayout,"Spaghetti"); // Test notif. One should add every time you open Twitter
         /*createNotification(linearLayout,"Spaghetti.");
         createNotification(linearLayout,"Spaghetti!");
@@ -62,20 +58,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
         createNotification(linearLayout,"Spaghetti :(");
         createNotification(linearLayout,"Spaghetti :)");*/
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(DisplayTwitterNots.this,"My Notification");
-        builder.setContentTitle("Test Title");
-        builder.setContentText("Test Text");
-        builder.setSmallIcon(R.drawable.ic_launcher_background);
-        builder.setAutoCancel(true);
-
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(DisplayTwitterNots.this);
-        managerCompat.notify(1,builder.build());
-        
     }
 
     // This method saves the data and keeps the notifications array list updated between activities.

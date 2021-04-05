@@ -1,15 +1,11 @@
 package com.teamo.myapplication;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -21,9 +17,9 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
+
+import com.teamo.myapplication.notification.GlobalNotification;
 
 import java.util.ArrayList;
 
@@ -32,6 +28,7 @@ import pub.devrel.easypermissions.PermissionRequest;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class MainActivity extends AppCompatActivity {
+    public static final int NOTIFICATION_ID = 1;
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
     //These array lists will store the string information to be printed in each notification method
@@ -212,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                     String notif = intent.getStringExtra("notification_information");
                     Log.d(TAG, notif);
                     main.addToList(temp, notif, twitterNots);
-
+                    GlobalNotification.buildNotification(context);
                 }
             }
 
