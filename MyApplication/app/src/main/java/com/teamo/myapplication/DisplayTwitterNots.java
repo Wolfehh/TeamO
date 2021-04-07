@@ -146,7 +146,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         // Create like Button
         Button like = new Button(this);
-        like.setWidth(270); // Sets width
         like.setHeight(79); // Sets height
         String Like = "Like";
         like.setText(Like);  // Sets text of the Button
@@ -161,7 +160,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         // Create reply Button
         Button reply = new Button(this);
-        reply.setWidth(270); // Sets width
         reply.setHeight(79); // Sets height
         String Reply = "Reply";
         reply.setText(Reply);  // Sets text of the Button
@@ -176,7 +174,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         // Create retweet Button
         Button retweet = new Button(this);
-        retweet.setWidth(270); // Sets width
         retweet.setHeight(79); // Sets height
         String Retweet = "Retweet";
         retweet.setText(Retweet);  // Sets text of the Button
@@ -191,7 +188,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
 
         // Create clear Button
         Button clear = new Button(this);
-        clear.setWidth(270); // Sets width
         clear.setHeight(79); // Sets height
         String CLEAR = "CLEAR";
         clear.setText(CLEAR);  // Sets text of the Button

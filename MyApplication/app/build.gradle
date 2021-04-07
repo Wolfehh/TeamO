@@ -47,9 +47,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    // For developers using AndroidX in their applications
-    implementation 'pub.devrel:easypermissions:3.0.0'
 
-    // For developers using the Android Support Library
+    implementation 'com.twitter.sdk.android:twitter:3.1.1'
+    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
+    implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'pub.devrel:easypermissions:2.0.1'
+
 }
