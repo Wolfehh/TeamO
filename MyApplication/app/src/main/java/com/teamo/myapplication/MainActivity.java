@@ -229,6 +229,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * This method is a refresh button for the home screen, allowing the user to check for new notifications
+     * @param view
+     */
+    public void refresh(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public void addToList (String full, String notif, ArrayList arr){
             arr.add(notif);
     }
