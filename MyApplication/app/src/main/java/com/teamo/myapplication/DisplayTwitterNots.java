@@ -23,27 +23,20 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class DisplayTwitterNots extends AppCompatActivity {
-    ArrayList<String> notifications;
+    ArrayList<String> notifications = new ArrayList<String>();
     ArrayList<String> notificationsTracker;
     LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_twitter_nots);
-        loadData(); // Loads previous data in shared preference and initializes notifications
         //Loading any new incoming notifications from Main Activity
         Intent intent = getIntent();
         ArrayList<String> incomingNotifications = intent.getStringArrayListExtra("twitterNots");
-        //Adding new notifications to display to our pre-loaded notification list. Removing them from incoming notifications in Main Activity.
+        //Adding new notifications to display. Removing them from incoming notifications in Main Activity once displayed.
         while (!incomingNotifications.isEmpty()){
-            if(notifications.contains(incomingNotifications.get(0))){
-                incomingNotifications.remove(0);
-                MainActivity.twitterNots.remove(0);
-            }
-            else{
                 notifications.add(incomingNotifications.remove(0));
                 MainActivity.twitterNots.remove(0);
-            }
 
         }
         notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
@@ -85,7 +78,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(notifications);
         editor.putString("Notification List", json);
-        //Attempting to prevent deletion of needed items from Main Activity's list of Notifications
+        //Saving remaining notifications to the Arraylist in Main
         Type type = new TypeToken<ArrayList<String>>(){}.getType();
         ArrayList<String> temp = gson.fromJson(json, type);
         while (!temp.isEmpty()){
@@ -94,6 +87,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
         editor.apply();
     }
 
+    //If we agree on the changes to fix the lack of duplicate notifications printing, this method can be deleted
     // This method loads the data, updates, and initializes the array list
     private void loadData(){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -111,14 +105,6 @@ public class DisplayTwitterNots extends AppCompatActivity {
     void createNotification(LinearLayout linearLayout, String notification){
         notificationsTracker.add(notification); // Adds to the modifiable array list
         Log.i("string", notification);
-
-        //These lines are commented out - I've hardcoded an ID for our linearlayout and have set the layout to be vertical in the xml file
-        //We can delete them before this branch is pulled, provided everyone agrees this change works properly during testing
-        //App will crash if they are not commented out - I will have to rework my code if we wish to create a brand new linear layout instead
-        //setContentView(linearLayout);   // Sets to the linear layout we create in onCreate
-        //linearLayout.setOrientation(LinearLayout.VERTICAL); // Ensures the layout is a vertical one and not a horizontal one
-
-
         String theNotification = "Notification: " + notification;   // Concatenates the text so it says Notification:
         TextView textView = new TextView(this); // Creates a new textbox in the activity context
         int id = (int)System.currentTimeMillis();   // Creates an id based off the time that it was created
