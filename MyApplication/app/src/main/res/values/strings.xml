@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Spaghetti Os Notification Manager</string>
     <string name="fb_not_recieved">You\'ve recieved a notification from Facebook</string>
     <string name="snap_not_recieved">You\'ve recieved a notification from Snapchat</string>
     <string name="twitter_not_recieved">You\'ve recieved a notification from Twitter</string>
