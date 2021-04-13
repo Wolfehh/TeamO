@@ -238,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private class NReceiver extends BroadcastReceiver
     {
-        MainActivity main = new MainActivity();
         @Override
         public void onReceive(Context context, Intent intent)
         {
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "twitter worked");
                     String notif = intent.getStringExtra("notification_information");
                     Log.d(TAG, notif);
-                    main.addToList(temp, notif, twitterNots);
+                    addToList(temp, notif, twitterNots);
 
                 }
             }
