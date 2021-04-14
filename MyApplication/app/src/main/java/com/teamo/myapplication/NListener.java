@@ -37,8 +37,8 @@ public class NListener extends NotificationListenerService
     @Override
     public void onDestroy()
     {
-        super.onDestroy();
         unregisterReceiver(nRecv);
+        super.onDestroy();
 
     }
 
