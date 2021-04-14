@@ -24,36 +24,22 @@ import java.util.ArrayList;
 
 public class DisplayTwitterNots extends AppCompatActivity {
     ArrayList<String> notifications = new ArrayList<String>();
-    ArrayList<String> notificationsTracker;
-    LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_twitter_nots);
-        //Loading any new incoming notifications from Main Activity
-        Intent intent = getIntent();
-        ArrayList<String> incomingNotifications = intent.getStringArrayListExtra("twitterNots");
-        //Adding new notifications to display. Removing them from incoming notifications in Main Activity once displayed.
-        while (!incomingNotifications.isEmpty()){
-                notifications.add(incomingNotifications.remove(0));
-                MainActivity.twitterNots.remove(0);
+
+        //Adding new notifications to display. Removing them from incoming notifications in Main Activity once loaded.
+        while (!MainActivity.twitterNots.isEmpty()){
+                notifications.add(MainActivity.twitterNots.remove(0));
 
         }
-        notificationsTracker = new ArrayList<>(); // Makes an array list that can be modified
         LinearLayout linearLayout = findViewById(R.id.twitterLayout); // Creating a variable to reference our linear layout during the activity
         if(!(notifications.isEmpty())){ // Loads all of the notifications in the shared preferences
             for(int i = 0; i < notifications.size(); i++){
                 createNotification(linearLayout, notifications.get(i));
             }
         }
-
-        createNotification(linearLayout,"Spaghetti"); // Test notif. One should add every time you open Twitter
-        /*createNotification(linearLayout,"Spaghetti.");
-        createNotification(linearLayout,"Spaghetti!");
-        createNotification(linearLayout,"Spaghetti?");
-        createNotification(linearLayout,"Spaghetti!!!");
-        createNotification(linearLayout,"Spaghetti :(");
-        createNotification(linearLayout,"Spaghetti :)");*/
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
@@ -71,6 +57,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
         
     }
 
+    //I've worked around the need for the saveData method to try and fix repeated notifications - delete if tests work
     // This method saves the data and keeps the notifications array list updated between activities.
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -103,7 +90,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
     }
 
     void createNotification(LinearLayout linearLayout, String notification){
-        notificationsTracker.add(notification); // Adds to the modifiable array list
+        MainActivity.twitterNots.add(notification); // Adds to the array list tracking notifications in Main
         Log.i("string", notification);
         String theNotification = "Notification: " + notification;   // Concatenates the text so it says Notification:
         TextView textView = new TextView(this); // Creates a new textbox in the activity context
@@ -191,7 +178,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
                 // Remove TextView
                 linearLayout.removeView(textView);
                 Log.i("substring",textView.getText().toString().substring(14));
-                notificationsTracker.remove(textView.getText().toString().substring(14));
+                MainActivity.twitterNots.remove(textView.getText().toString().substring(14));
 
             }
         });
@@ -200,8 +187,9 @@ public class DisplayTwitterNots extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        notifications.clear(); // Empties the array list
-        notifications.addAll(notificationsTracker); // Adds the new array list of leftover notifications
-        saveData(); // Saves to shared preferences
+        //All below code can be deleted if tests work - I've eliminated the use of gson/json to save shared preferences
+        //notifications.clear(); // Empties the array list
+        //notifications.addAll(notificationsTracker); // Adds the new array list of leftover notifications
+        //saveData(); // Saves to shared preferences
     }
 }
