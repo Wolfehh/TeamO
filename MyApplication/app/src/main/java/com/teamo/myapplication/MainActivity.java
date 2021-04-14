@@ -132,6 +132,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void onDestroy()
+    {
+        unregisterReceiver(nRecv);
+        super.onDestroy();
+    }
 
     /**
      * I really believe this is working
@@ -251,9 +256,9 @@ public class MainActivity extends AppCompatActivity {
             //Log.i(TAG, temp);
             if(temp.contains("Posted")) {
                 if (temp.contains("twitter")) {
-                    Log.d(TAG, "twitter worked");
+                    Log.i(TAG, "Twitter Notification Added");
                     String notif = intent.getStringExtra("notification_information");
-                    Log.d(TAG, notif);
+                    Log.i(TAG, notif);
                     addToList(temp, notif, twitterNots);
 
                 }
