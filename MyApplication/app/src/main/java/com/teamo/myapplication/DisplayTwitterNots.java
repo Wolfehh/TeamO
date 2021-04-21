@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -26,6 +27,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
     ArrayList<String> notifications;
     ArrayList<String> notificationsTracker;
     LinearLayout linearLayout;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
     }
 
     // This method saves the data and keeps the notifications array list updated between activities.
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void saveData(){
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -211,6 +214,7 @@ public class DisplayTwitterNots extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onDestroy() {
         super.onDestroy();
