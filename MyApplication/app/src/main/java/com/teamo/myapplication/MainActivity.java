@@ -45,7 +45,14 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private NReceiver nRecv;
     private TwitterLoginButton loginButton;
-
+    TextView twitter;
+    Button twitterButton;
+    TextView fb;
+    Button fbButton;
+    TextView snap;
+    Button snapButton;
+    TextView insta;
+    Button instaButton;
     //These array lists will store the string information to be printed in each notification method
 
    public static ArrayList<String> twitterNots = new ArrayList<>();
@@ -92,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
         //snapNots.add("snap");
         //instaNots.add("Words");
         //Creating variables to alter which notifications are visible on the home screen
-        TextView twitter = findViewById(R.id.textView2);
-        Button twitterButton = findViewById(R.id.button2);
-        TextView fb = findViewById(R.id.textView);
-        Button fbButton = findViewById(R.id.button);
-        TextView snap = findViewById(R.id.textView3);
-        Button snapButton = findViewById(R.id.button3);
-        TextView insta = findViewById(R.id.textView4);
-        Button instaButton = findViewById(R.id.button4);
+        twitter = findViewById(R.id.textView2);
+        twitterButton = findViewById(R.id.button2);
+        fb = findViewById(R.id.textView);
+        fbButton = findViewById(R.id.button);
+        snap = findViewById(R.id.textView3);
+        snapButton = findViewById(R.id.button3);
+        insta = findViewById(R.id.textView4);
+        instaButton = findViewById(R.id.button4);
         //Changing visiblity of Views if there are no notifications from a particular site
         if(twitterNots.isEmpty()){
             twitter.setVisibility(View.GONE);
@@ -260,6 +267,12 @@ public class MainActivity extends AppCompatActivity {
                     String notif = intent.getStringExtra("notification_information");
                     Log.i(TAG, notif);
                     addToList(temp, notif, twitterNots);
+
+                    if(!twitterNots.isEmpty())
+                    {
+                        twitter.setVisibility(View.VISIBLE);
+                        twitterButton.setVisibility(View.VISIBLE);
+                    }
 
                 }
             }
